@@ -6,3 +6,11 @@ COMMAND --------> Module
     command: touch file2     --/                  the last command module to run.
 
 -----------------------------------------------------------------------------------------------------------
+Script Args ---- created or removes
+   -
+        name: "Run a script only if file exists on the remote node"
+        script: script.sh
+        args:
+            removes: bcg.txt  --\        any one condition must be true to run the script
+            removes: file1    --/
+-----------------------------------------------------------------------------------------------------------            
