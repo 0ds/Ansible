@@ -60,11 +60,14 @@ https://docs.ansible.com/ansible/latest/modules/stat_module.html           -----
 -
  name: "part 1"
  hosts: centos1
- tasks:
+ tasks:                                                                         ######  WHEN Condition ######
    - stat:
-      path: /home/vagrant/sh.txt
-     register: st
+      path: /home/vagrant/sh.txt                                                 == true          
+     register: st                                                                == false
    - debug:
       msg: "i have read permissions"
-     when: st.stat.readable
+     when: st.stat.readable  -------------------------------------------------> - debug:
+                                                                                   msg: "this  file doesnt have right permission"
+                                                                                  when: p.stat.readable == false
+
 
