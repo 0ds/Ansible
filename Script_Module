@@ -20,3 +20,11 @@
   script: /some/local/script.py
   args:
     executable: python3
+
+============TIPs===========
+   -
+        name: "Run a script only if file exists on the remote node"
+        script: script.sh
+        args:
+            removes: bcg.txt  --\        any one condition must be true to run the script
+            removes: file1    --/
