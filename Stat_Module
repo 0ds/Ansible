@@ -4,9 +4,9 @@ https://docs.ansible.com/ansible/latest/modules/stat_module.html           -----
 # Obtain the stats of /etc/foo.conf, and check that the file still belongs
 # to 'root'. Fail otherwise.
 - stat:
-    path: /etc/foo.conf
-  register: st
-- fail:
+    path: /etc/foo.conf                                                              ####### WHEN Condition #######
+  register: st                                                                          == 'xyz'
+- fail:                                                                                 != 'xyz'
     msg: "Whoops! file ownership has changed"
   when: st.stat.pw_name != 'root'     --------------------------------------------->  when: st.stat.pw_name == 'root'   ==> Equals to and Not-EqualsTo Condition
 
