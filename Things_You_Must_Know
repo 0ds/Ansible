@@ -1,0 +1,8 @@
+COMMAND --------> Module
+
+-
+    name: task2
+    command: touch file2     --\                  running multiple commad module will result into only
+    command: touch file2     --/                  the last command module to run.
+
+-----------------------------------------------------------------------------------------------------------
