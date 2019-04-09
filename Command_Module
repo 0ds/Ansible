@@ -1,0 +1,12 @@
+1. expect – Executes a command and responds to prompts  -------------> can be used to set password for some user and so on
+PreRequesite:-
+    python >= 2.6    ---> On host Machine
+    pexpect >= 3.3   --->     ||
+
+  Synopsis:-
+    The expect module executes a command and responds to prompts.
+    The given command will be executed on all selected nodes. It will not be processed through the shell, so variables like $HOME and operations like "<", ">", "|", and "&" will not work.
+
+
+2. shell – Execute commands in nodes.
+3. raw – Executes a low-down and dirty SSH command
