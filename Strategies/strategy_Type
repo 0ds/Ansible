@@ -1,0 +1,15 @@
+types:- 2
+  1. Linear  --------> (DEFAULT) one by one i.e first task will get completed on all the servers then 2nd task will get triggered
+  2. Free    --------> thers no need to wait for the others that they have completed their tasks or not, carry operation independently
+----------------------------
+
+---
+- name: 
+  hosts: server1,server2
+  strategy: free
+  tasks:
+  - name:                  -------------> TASK 1
+    yum:
+    
+  - name:                  --------------> TASK 2
+    yum:
