@@ -1,0 +1,15 @@
+variable.yml
+  var1 : a
+  var2 : b
+  .      .
+  .      .
+  .      .
+-----------------------------------------
+
+---
+- name:
+  hosts:
+  vars_files:
+    - variable.yml
+  tasks:
+  -  
