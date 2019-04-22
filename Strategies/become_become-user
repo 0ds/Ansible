@@ -1,0 +1,12 @@
+---
+- name:
+  hosts:
+  become: True         ----------------------------> is similar to use SUDO command
+  become_user: root    ----------------------------> to change user
+  tasks:
+    - name: 
+      lineinfile:
+----------------------------------
+  
+      # ansible-playbook playbook.yml --ask-become-pass
+      >>>SUDO password: **********
