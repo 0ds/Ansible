@@ -1,3 +1,33 @@
+
+New directives
+===================
+become
+    equivalent to adding sudo: or su: to a play or task, set to ‘true’/’yes’ to activate privilege escalation
+become_user
+    equivalent to adding ‘sudo_user:’ or ‘su_user:’ to a play or task, set to user with desired privileges
+become_method
+    at play or task level overrides the default method set in ansible.cfg, set to ‘sudo’/’su’/’pbrun’/’pfexec’/’doas’
+
+New ansible_ variables
+==============================
+Each allows you to set an option per group and/or host
+
+ansible_become
+    equivalent to ansible_sudo or ansible_su, allows to force privilege escalation
+ansible_become_method
+    allows to set privilege escalation method
+ansible_become_user
+    equivalent to ansible_sudo_user or ansible_su_user, allows to set the user you become through privilege escalation
+ansible_become_pass
+    equivalent to ansible_sudo_pass or ansible_su_pass, allows you to set the privilege escalation password
+=============================
+New command line options
+--ask-become-pass
+
+----------------------------------------------------------------------------------------------------------
+
+
+
 ---
 - name:
   hosts:
