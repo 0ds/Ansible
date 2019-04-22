@@ -1,0 +1,14 @@
+ignore_errors: True|False
+
+-------------------------------------------------------------
+---
+- name: 
+  hosts: server1,server2
+  strategy: free
+  tasks:
+  - name:                  -------------> TASK 1
+    yum:
+    ignore_errors: True      ----------------------------------------> True means even if task 1 fails task 2 will still be executed
+    
+  - name:                  --------------> TASK 2
+    yum:
