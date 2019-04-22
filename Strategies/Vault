@@ -11,3 +11,25 @@ De-crypt
  How to use this encrypted inventory file in ansible-playbook command
     # ansible-playbook -i enc_ed_password.ini playbook.yml --ask-vault-pass
     vault password: ********
+=====================================================================================
+                ###### EXAMPLE 2 #######
+
+$ ansible-vault create my_vault.yml
+   >>>>>>      su_password: <myreallyspecialpassword>
+$ ansible-vault edit my_vault.yml
+-------------------------------
+my_vault.yml
+-----------------------------------------------
+---                                             |
+- name: My Awesome Playbook                     |
+  hosts: remote                                 |
+  become: yes                                   |
+                                                |
+  vars_files:                                   |
+    - ~/.ansible/my_vault.yml                   |
+                                                |
+  vars:                                         |
+    ansible_become_pass: '{{ su_password }}'    |-------------> by DEFAULT Become user is "ROOT"
+                                                |
+  roles:                                        |
+      - some_awesome_role                       |
