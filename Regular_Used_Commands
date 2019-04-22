@@ -1,0 +1,4 @@
+Listing Data in INVENTORY File:-
+  # ansible -i static_inventory db --list
+                                 \............> Entries inside "db" group
+-------------------------------------------------------------------------------                                 
