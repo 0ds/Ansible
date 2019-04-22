@@ -1,0 +1,11 @@
+### With Items ###
+
+- name: Installing Java and Tomcat (RedHat).
+           yum:
+             name: "{{ item }}"
+             state: installed
+           with_items:
+             - java
+             - tomcat
+             - tomcat-webapps
+             - tomcat-admin-webapps
