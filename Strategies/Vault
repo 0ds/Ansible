@@ -1,0 +1,13 @@
+Encrypt/De-crypt:-
+-----------------------
+Encrypt
+    # ansible-vault encrypt inventory.ini --output enc_ed_inventory.ini
+    vault password: ********
+
+De-crypt
+    # ansible-vault view enc_ed_inventory.ini
+    vault password: ********
+-------------------------
+ How to use this encrypted inventory file in ansible-playbook command
+    # ansible-playbook -i enc_ed_password.ini playbook.yml --ask-vault-pass
+    vault password: ********
