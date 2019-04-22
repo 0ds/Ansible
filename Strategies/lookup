@@ -1,0 +1,15 @@
+credential.cvs
+
+webserver:webserver@123
+sqlserver:sqlserver@123
+
+---------------------------------------------------
+
+---
+- name: lookup concept
+  hosts: sqlserver                   .-------> ini               <--------------- for 'ini' file
+  vars:                             /
+    ansible_ssh_pass: "{{ lookup('cvsfile',' sqlserver file=credential.cvs delimiter=:') }}"       --------> in your inventory file remove the tag "ansible_ssh_pass"
+  tasks: 
+    - name: create a dummy file in sqlserver
+      command: touch /tmp/file.txt
