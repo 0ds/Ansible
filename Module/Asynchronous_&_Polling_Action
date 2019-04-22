@@ -1,0 +1,11 @@
+---
+-       hosts: server
+        tasks:
+        -       name: sleep
+                command: sleep 30 -------------> time taken by command to execute completely
+                async: 40 ---------------------> Maximum time (### Time in Seconds ###) 
+                poll: 10  ---------------------> After every 10 second it will check for the task status
+                
+#### TEST ####
+ step1:- on host type the command to check for the connection
+            # watch -n 1 who
