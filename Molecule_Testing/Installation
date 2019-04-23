@@ -1,0 +1,10 @@
+$ sudo yum install epel-release
+$ sudo yum install python-pip
+$ sudo -H pip install --upgrade PyYAML ----------> upgrage "PyYAML" before updating "python-pip" 
+                                                   bcoz, >>> I found in its Github issue that pip 10 no longer uninstalls 
+                                                   distutils packages. So I downgraded to pip 8.1.1. And now it works. <<<
+$ sudo pip install python --upgrade
+$ sudo pip install molecule docker   -----------> if u also want docker images for deployment testing use "docker driver to install"                                                   
+ ===========================================
+  # molecule --version   ---------> to test
+
