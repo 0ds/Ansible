@@ -1,0 +1,14 @@
+---
+-       name: file module for recursive permission change
+        hosts: localhost
+        tasks:
+        -        name: Test task
+                 file:
+                    path: /opt/new/
+                    state: directory
+                    owner: vagrant
+                    group: vagrant
+                    mode: 0750
+                    recurse: yes
+                 become: yes
+
