@@ -1,3 +1,7 @@
+URL:-
+          https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html          
+==================================================================================================
+
 ### With Items ###
 
 - name: Installing Java and Tomcat (RedHat).
