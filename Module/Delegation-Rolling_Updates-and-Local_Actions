@@ -1,0 +1,14 @@
+  when: ansible_hostname == "that_one_host"   --------------> " " is must
+           \........> inventory_hostname (hostname as defined in the Ansible inventory) instead of ansible_hostname (hostname as defined on the target machine), depending on which name you want to use.
+
+----------------------------------------------------------------------------------------
+Delegate_to     +      When_Condition
+
+  - name: Local command
+    command: hostname
+    register: target_host
+    when: vhost is undefined
+    delegate_to: 127.0.0.1
+
+----------------------------------------------------------------------------------------
+
