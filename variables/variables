@@ -1,0 +1,247 @@
+VARIABLE DECLERATION :-   ( ### ISSUE with " " i.e inverted commans ### )
+====================
+   a) In playbook & roles -----> its mandatory to use " " to avoid miss interpretation
+   b) In template files & config files ----> "{{ var }}" = "192.166.0.0" ----> if "" used will also get copied
+----------------------------------------------------------------------------------------------------------------------
+ROLE:-
+=====
+
+default/main.yml
+`````````````````
+---
+# defaults file for haproxy
+server_ip:
+ - 192.168.121.221
+ - 192.168.121.117
+server_port:
+ - 80
+ - 80
+
+template/haproxy.cfg.j2
+```````````````````````
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend  main *:5000
+    acl url_static       path_beg       -i /static /images /javascript /stylesheets
+    acl url_static       path_end       -i
+
+    use_backend static          if url_static
+    default_backend             app
+
+#---------------------------------------------------------------------
+# static backend for serving up images, stylesheets and such
+#---------------------------------------------------------------------
+backend static
+    balance     roundrobin
+    server      static 127.0.0.1:4331 check
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend app
+    balance     roundrobin
+    server  app1 {{ server_ip }}:{{ server_port }}  check         =========\                List variables once and
+    server  app2 {{ server_ip }}:{{ server_port }}  check         =========/                call them again-&-again in sequence
+=======================================================================================================================
+
+                                  ** Ansible Variables and Variables Precedence **
+
+What is a variable?
+
+A variable is reference to data stored in a computer program.
+How to define variable in Ansible?
+Variables Defined in Inventory
+Variables can be defined in inventory in two ways -
+       1.  Host variables
+[web]
+host1 http_port=80
+host2 http_port=443
+
+       2. Group variables
+[web]
+host1
+host2
+
+[web:vars]
+http_port=80
+proxy=proxy.example.com
+
+Variables Defined in a Playbook
+
+You can directly define variables in a playbook: 
+- hosts: appgroup
+  vars:
+    http_port: 80
+
+Variables defined from included files and roles
+
+You can define your variables in a YAML file and store it in VARS folder.
+You can include your variable file in your task file “using include_vars”.
+Eg - include_vars: variable.yml 
+
+Information discovered from systems: Facts
+You can also use the variables defined in the remote system as facts.
+To gather all the information about remote server you can run the command:
+
+ansible hostname -m setup
+
+Local Facts (Facts.d)
+You can also write own facts modules. “Facts.d” is one way to control some aspect of 
+how systems are managed.
+If a remotely managed system has an /etc/ansible/facts.d directory, any files in this directory 
+ending in .fact, can be JSON, INI, or executable files returning JSON, and these can supply 
+local facts in Ansible.
+
+Eg - assume /etc/ansible/facts.d/http.fact contains:
+[general]
+http_port=80
+ssl_port=22
+
+Registered Variables
+You can also store result of a command into a variable.
+
+- hosts: appgroup
+  tasks:
+     - shell: /usr/bin/foo
+       register: foo_result
+       ignore_errors: True
+
+     - shell: /usr/bin/bar
+       when: foo_result.rc == 5
+
+Variable File Separation
+
+You can also define your variables in different files.
+
+- hosts: appgroup
+  vars:
+     http_port: 80
+  vars_files:
+    - /vars/http.yml
+
+Passing Variables On The Command Line
+You can also set the variables in command line using --extra-vars or -e. 
+Eg: ansible-playbook test.yml -e "http_port=80"
+
+Variable Precedence
+````````````````````
+If multiple variables of the same name are defined in different places, they get overwritten in a 
+certain order.
+Here is the order of variable precedence from low to high.
+
+    role defaults 
+    inventory file or script group vars 
+    inventory group_vars/all  
+    playbook group_vars/all 
+    inventory group_vars/* 
+    playbook group_vars/* 
+    inventory file or script host vars 
+    inventory host_vars/* 
+    playbook host_vars/* 
+    host facts / cached set_facts 
+    play vars 
+    play vars_prompt 
+    play vars_files 
+    role vars (defined in role/vars/main.yml) 
+    block vars (only for tasks in block) 
+    task vars (only for the task) 
+    include_vars 
+    set_facts / registered vars 
+    role (and include_role) params 
+    include params 
+    extra vars (always win precedence)
+
+To verify this what I did, is to define the variables in different locations and then remove 
+the values from those location one by one.
+Here I have created a role to create a user in linux. You can see the files where I have 
+defined those variables. 
+
+default/main.yml
+
+---
+# defaults file for ansible/roles/user
+
+ user_name: john_cena
+...
+
+/etc/ansible/hosts (group vars)
+
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+[appgroup]
+appserver1
+appserver4
+
+[appgroup:vars]
+user_name=batista
+
+/etc/ansible/hosts (host vars)
+
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+[appgroup]
+appserver1 user_name=roman_reigns
+appserver4  user_name=roman_reigns
+
+/tasks/main.yml (play vars)
+
+---
+# tasks file for ansible/roles/user
+
+#- name: Include user yml file.
+#  include_vars: "user.yml"
+
+- name: Add the user
+  vars:
+    user_name: triple_h
+  user:
+    name: "{{ user_name }}"
+    comment: John Doe
+    uid: 1045
+    group: vagrant
+...
+
+/vars/user.yml (include_file)
+---
+
+  user_name: edge
+...
+
+/tasks/main.yml (set_fact)
+
+---
+# tasks file for ansible/roles/user
+
+- name: Set user name.
+  set_fact:
+    user_name: undertaker
+
+- name: Add the user
+  user:
+    name: "{{ user_name }}"
+    comment: John Doe
+    uid: 1051
+    group: vagrant
+...
+
+Extra vars
+ansible-playbook add_user.yml -e “ user_name=cm_punk”
+In this way you can check precedence of variables in ansible role.
+-------------------------------------------------------------------------------------------------------------------
