@@ -1,1 +1,6 @@
 1. pre_tasks -------> keyword just lets you list tasks to run before the roles are called. 
+2. VARIABLE DECLERATION :-   ( ### ISSUE with " " i.e inverted commans ### )
+   ====================
+   a) In playbook & roles -----> its mandatory to use " " to avoid miss interpretation
+   b) In template files &  config files ----> "{{ var }}" = "192.166.0.0" ----> if  "" used will also get copied
+   
