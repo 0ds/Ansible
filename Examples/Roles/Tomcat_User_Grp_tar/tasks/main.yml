@@ -1,0 +1,46 @@
+---
+- name: Installing Java
+          yum:
+           name: "{{ item }}"
+           state: installed
+    
+        - name: ensuring group TOMCAT
+          group:
+            name: tomcat
+            state: present
+        - name: Create user
+          user:
+            name: tomcat
+            shell: /bin/false
+            home: /opt/tomcat
+            groups: tomcat
+            append: yes
+        - name: Download Tomcat tar
+          unarchive:
+            src: http://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.40/bin/apache-tomcat-8.5.40.tar.gz
+            dest: /opt/
+            remote_src: yes
+        - name: example copying file with owner and permissions
+          copy:
+            src: /opt/tomcat.service
+            dest: /etc/systemd/system/
+            owner: tomcat
+            group: tomcat
+            mode: 0776
+        -  file:
+            path: /opt/apache-tomcat-8.5.40/
+            owner: tomcat
+            group: tomcat
+            mode: 0776
+            state: directory
+            recurse: yes
+        - name: Ensure tomcat is running.
+          systemd:
+           state: restarted
+           daemon_reload: yes
+           name: tomcat
+           enabled: yes
+        - debug:
+           msg: command executed
+          when: inventory_hostname == "centos"
+
