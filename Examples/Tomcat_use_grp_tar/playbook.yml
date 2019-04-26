@@ -1,9 +1,14 @@
 ---
-- name: Installing Java
+- name: task
+  hosts: all
+  become: yes
+  tasks:
+        - name: Installing Java
           yum:
            name: "{{ item }}"
            state: installed
-    
+          with_items:
+           - java
         - name: ensuring group TOMCAT
           group:
             name: tomcat
