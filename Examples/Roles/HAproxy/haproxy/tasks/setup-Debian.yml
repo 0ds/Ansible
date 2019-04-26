@@ -1,0 +1,25 @@
+---
+- name: Ensure HAproxy is installed
+   apt:
+    name: "{{ __HAproxy_package_list }}"
+    state: installed
+  when: inventory_hostname == "HAproxy"
+- name: Update apt cache (Debian).
+  apt:
+   update_cache: yes
+   cache_valid_time: 86400
+  when: ansible_os_family == 'Debian'
+- name: Ensure Tomcat is installed (Debian).
+   apt:
+    name: "{{ __Debian_package_list }}"
+    state: installed
+  when: inventory_hostname != "HAproxy"
+- name: Restart apache2
+  systemd:
+   state: restarted
+   name: apache2
+   enabled: yes
+  when: inventory_hostname != "HAproxy"
+
+
+   

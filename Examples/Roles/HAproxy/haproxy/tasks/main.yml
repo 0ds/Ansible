@@ -1,0 +1,10 @@
+---
+- name: install httpd on RedHat destro
+  include_tasks: setup-Redhat.yml
+  when: ansible_os_family == 'RedHat'
+- name: install apache2 on Debian destro
+  include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+- include: config_file.yml
+- include: copy_files.yml
+

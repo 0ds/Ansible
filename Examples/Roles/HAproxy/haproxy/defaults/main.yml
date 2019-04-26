@@ -1,0 +1,7 @@
+---
+# defaults file for haproxy
+server1_ip: 192.168.121.221
+server2_ip: 192.168.121.117
+server1_port: 80
+server2_port: 80
+httpd_port: 80

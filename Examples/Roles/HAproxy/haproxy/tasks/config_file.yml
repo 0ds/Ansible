@@ -1,0 +1,26 @@
+---
+- name: Copy haproxy config file
+  template:
+   src: haproxy.cfg.j2
+   dest: /etc/haproxy/haproxy.cfg
+   owner: root
+   group: root
+   mode: 0644
+  notify: restart haproxy
+  when: inventory_hostname == "HAproxy"
+- name: Editing Tomcat configfile
+  lineinfile:
+   path: /etc/httpd/conf/httpd.conf
+   regexp: '^Listen '
+   insertafter: '^#Listen '
+   line: "Listen {{ httpd_port }}"
+  when: inventory_hostname == "Redhat"
+- name: Editing Tomcat configfile
+  lineinfile:
+   path: /etc/apache2/ports.conf
+   regexp: '^Listen '
+   insertafter: '^#Listen '
+   line: "Listen {{ httpd_port }}"
+  when: inventory_hostname == "Debian"
+
+ 

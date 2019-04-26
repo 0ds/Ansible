@@ -1,0 +1,8 @@
+---
+# vars file for haproxy
+__Redhat_package_list:
+ - httpd
+__Debian_package_list:
+ - apache2
+__HAproxy_package_list:
+ - haproxy

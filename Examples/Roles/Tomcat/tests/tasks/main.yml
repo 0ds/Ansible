@@ -1,0 +1,39 @@
+---
+         - name: Installing Java and Tomcat (RedHat).
+           yum:
+             name: "{{ item }}"
+             state: installed
+           with_items:
+             - java
+             - tomcat
+             - tomcat-webapps
+             - tomcat-admin-webapps
+           when: ansible_os_family == 'RedHat'
+         
+         - name: Update apt cache (Debian).
+           apt:
+             update_cache: yes
+             cache_valid_time: 86400
+           when: ansible_os_family == 'Debian'
+ 
+         - name: Ensure Tomcat is installed (Debian).
+           apt:
+             name: tomcat
+             state: installed
+           when: ansible_os_family == 'Debian'
+          
+         - name: Copy tomcat server.xml.
+           template:
+             src: server.xml.j2
+             dest: /etc/tomcat/server.xml
+             owner: root
+             group: tomcat
+             mode: 0644
+           notify: restart tomcat
+        
+         - name: Ensure tomcat is running.
+           systemd:
+             state: started
+             name: tomcat
+             enabled: yes
+          

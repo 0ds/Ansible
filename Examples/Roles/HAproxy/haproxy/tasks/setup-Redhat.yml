@@ -1,0 +1,19 @@
+---
+- name: Ensure HAproxy is installed
+  yum:
+   name: "{{ __HAproxy_package_list }}"
+   state: installed
+  when: inventory_hostname == "HAproxy"
+- name: Ensure Tomcat is Installed
+  yum:
+   name: "{{ __Redhat_package_list }}"
+   state: installed
+  when: inventory_hostname != "HAproxy"
+- name: Restart httpd
+  systemd:
+   state: restarted
+   name: httpd
+   enabled: yes
+  when: inventory_hostname != "HAproxy"
+
+
